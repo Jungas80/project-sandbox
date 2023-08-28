@@ -13,6 +13,7 @@ This repository contains a set of Bash scripts designed to automate the setup of
 1. `1_unified-workflow.sh`: Main script to set up GitHub repository and AWS resources.
 2. `5_delete-repository.sh`: Script to delete the GitHub repository. (Note: This is a placeholder; actual implementation may vary.)
 3. `wrapper.sh`: A wrapper script to set environment variables.
+4. `renew_credentials.sh`: Script to renew AWS credentials and recreate the S3 bucket for Terraform state files.
 
 ### Actions Workflows Templates
 
@@ -47,4 +48,7 @@ This repository contains a set of Bash scripts designed to automate the setup of
     source ./wrapper.sh
     ```
 
+## Important Note
+
+- Make sure to change the `owner` variable in both `1_unified-workflow.sh` and `renew_credentials.sh` to match the owner of the GitHub account you are working with.
 
