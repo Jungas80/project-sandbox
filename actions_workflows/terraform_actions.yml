@@ -1,0 +1,40 @@
+name: Terraform automation
+on:
+  pull_request:
+  workflow_dispatch:
+  issue_comment:
+    types: [created]
+permissions:
+  actions: write
+  contents: write
+  id-token: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  terraform_automation:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check event_type
+      id: check_event_type
+      run: echo "is_issue_comment=${{ github.event_name == 'issue_comment' }}" >> $GITHUB_ENV
+
+    - name: Checkout repository if event issue_coment
+      if: env.is_issue_comment == 'true'
+      uses: actions/checkout@v3
+      with:
+        ref: refs/pull/${{ github.event.issue.number }}/head
+
+    - name: Checkout repository
+      if: env.is_issue_comment == 'false'
+      uses: actions/checkout@v3
+
+    - name: Terraform automation
+      uses: jvo5610/terraform-pr-automation@v0.1.0
+      with:
+        LOG_LEVEL: DEBUG
+        IAC_TOOL: TERRAFORM
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  
